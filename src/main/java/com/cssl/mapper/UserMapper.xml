@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cssl.mapper.UserMapper">
+
+    <select id="findAllUser" resultType="User" >
+        SELECT * FROM `user` ORDER BY `open_date` DESC
+    </select>
+
+    <select id="fuzzySearchUser" resultType="User">
+        SELECT * FROM `user` WHERE mark_no LIKE concat('%',#{mark_no},'%');
+    </select>
+
+    <insert id="addNewUser" parameterType="User" >
+        INSERT INTO `user`(`user_name`,`mark_no`,`status`,`phone`,`open_date`)
+        VALUES(#{user_name},#{mark_no},#{status},#{phone},#{open_date});
+    </insert>
+
+    <select id="findNoMarkUser" resultType="User">
+        SELECT * FROM `user` WHERE `status` = 1
+    </select>
+
+    <update id="updateUserStatus">
+        UPDATE `user` SET `status` = 0 WHERE id = #{id}
+    </update>
+
+
+</mapper>

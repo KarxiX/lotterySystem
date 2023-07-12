@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>摇号!</title>
+    <style>
+        input {
+            font-size: 22px;
+            color: #97e7ef;
+        }
+
+        button {
+            position: relative;
+            padding: 10px 40px;
+            margin: 0px 10px 10px 0px;
+            border-radius: 3px;
+            font-size: 20px;
+            color: #FFF;
+            text-decoration: none;
+            background-color: rgba(46, 91, 204, 0.78);
+            border: none;
+            border-bottom: 5px solid #35ffed;
+            text-shadow: 0px -2px #1e9ecc;
+            -webkit-transition: all 0.1s;
+            transition: all 0.1s;
+        }
+
+        button:hover, button:active {
+            -webkit-transform: translate(0px, 5px);
+            -ms-transform: translate(0px, 5px);
+            transform: translate(0px, 5px);
+            border-bottom: 1px solid #00a5c7;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+            font-family: "Microsoft JhengHei UI", serif;
+        }
+
+        table td, table th {
+            border: 1px solid #cad9ea;
+            color: rgba(102, 102, 102, 0.86);
+            height: 30px;
+        }
+
+        table thead th {
+            background-color: #CCE8EB;
+            width: 100px;
+        }
+
+        table tr:nth-child(odd) {
+            background: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background: #F5FAFA;
+        }
+
+        #trs tr:nth-child(even) {
+            background-color: #ABF8FFA6; /* 偶数行背景色 */
+            color: #FFFFFF;
+        }
+
+        #trs tr:nth-child(odd) {
+            background-color: #ffffff; /* 奇数行背景色 */
+        }
+
+    </style>
+    <script src="jquery-1.8.3.min.js"></script>
+</head>
+<body>
+<center>
+    <div style="margin-top: 100px">
+        <label>
+            <span style="color: #1e9ecc;font-size:24px ">摇几个幸运儿?</span><input type="text" name="lotteryNum"
+                                                                                    placeholder="输入摇号数!"
+                                                                                    id="lotteryNum">
+            <button id="lottery"> 开摇!</button>
+        </label>
+    </div>
+    <div>
+        <table border="1" width="800px" style="text-align: center">
+            <tbody id="trs">
+            <tr>
+                <td>姓名</td>
+                <td>中签号码</td>
+            </tr>
+            </tbody>
+            <colgroup>
+                <col>
+                <col>
+                <col>
+                <col>
+                <col>
+            </colgroup>
+        </table>
+    </div>
+</center>
+<script type="text/javascript">
+    $('#lottery').click(function () {
+        let num = $('#lotteryNum').val();
+        let html = ''; // 用于拼接数据行的HTML内容
+        $.getJSON('http://localhost:8080/lotterySystem/lotteryUser.do?num=' + num, function(data) {
+            $('#trs tr:not(:first)').remove();
+            alert(data.message);
+            var html = ''; // 用于存储拼接的HTML字符串
+
+            for (var i = 0; i < data.winners.length; i++) {
+                var winner = data.winners[i];
+                var winnerNames = data.winnerNames[i];
+                html += '<tr>';
+                html += '<td>' + winnerNames + '</td>'; // 将每个winner拼接到HTML中的<td>标签内
+                html += '<td>' + winner + '</td>'; // 将每个winnerNames拼接到HTML中的<td>标签内
+                html += '</tr>';
+            }
+
+            $('#trs').append(html); // 将拼接好的HTML添加到指定的元素中
+        });
+
+
+    })
+</script>
+</body>
+</html>
